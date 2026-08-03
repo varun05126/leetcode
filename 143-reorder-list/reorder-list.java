@@ -10,46 +10,37 @@
  */
 class Solution {
     public void reorderList(ListNode head) {
-        if (head == null || head.next == null) return;
-        
-        ListNode mid = findMid(head);
-        ListNode rev = reverse(mid.next);
-        mid.next = null;
-        merge(head, rev);
-    }
-    
-    private ListNode findMid(ListNode head) {
-        ListNode slow = head;
-        ListNode fast = head;
-        
-        while (fast.next != null && fast.next.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
+        //step 1: finding middle
+
+        ListNode s = head, f = head;
+
+        while(f.next != null && f.next.next!=null)
+        {
+            s = s.next;
+            f=f.next.next;
         }
-        return slow;
-    }
-    
-    private ListNode reverse(ListNode head) {
-        ListNode prev = null;
-        ListNode curr = head;
         
-        while (curr != null) {
-            ListNode nextTemp = curr.next;
+        //step 2: reverse second half
+
+        ListNode prev = null, curr = s.next;
+        s.next = null;
+
+        while(curr != null)
+        {
+            ListNode temp = curr.next;
             curr.next = prev;
             prev = curr;
-            curr = nextTemp;
+            curr = temp;
         }
-        return prev;
-    }
-    
-    private void merge(ListNode first, ListNode second) {
-        while (second != null) {
+
+        ListNode first = head, second = prev;
+
+        while(second != null)
+        {
             ListNode temp1 = first.next;
             ListNode temp2 = second.next;
-            
             first.next = second;
             second.next = temp1;
-            
             first = temp1;
             second = temp2;
         }
